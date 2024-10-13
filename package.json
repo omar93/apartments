@@ -1,9 +1,18 @@
 {
   "type": "module",
-  "dependencies": {
-    "express": "^4.21.1"
-  },
+  "name": "apartments",
+  "version": "0.1.0",
+  "description": "",
+  "main": "server.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --watch server.js"
+  },
+  "keywords": [],
+  "author": "Omar Alhamad <omar93@hotmail.se>",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.1"
   }
 }

@@ -9,3 +9,25 @@ body {
     flex-direction: column;
     width: 500px;
 }
+
+.horizontal {
+    display: flex;
+    width: 100%;
+}
+
+label {
+    text-align: left;
+    font-family: sans-serif;
+    font-size: large;
+}
+
+#inputField {
+    height: 20px;
+    border-radius: 5px;
+    flex: 3;
+}
+
+button {
+    border-radius: 10px;
+    flex: 0.5;
+}
