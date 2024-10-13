@@ -1,3 +1,17 @@
+import { google } from 'googleapis'
+
+const auth = new google.auth.GoogleAuth({
+  keyFile: 'credentials.json',
+  scopes: 'https://www.googleapis.com/auth/spreadsheets'
+})
+
+const client = await auth.getClient()
+
+const googleSheets = google.sheets({
+  version: 'v4',
+  auth: client
+})
+
 export const formatApartmentData = (dom) => {
   
   let dataObject = {}
@@ -23,4 +37,38 @@ export const formatApartmentData = (dom) => {
 
   return dataObject
 
+}
+
+export const getGoogleSpreadSheet = async (id) => {
+  const data = await googleSheets.spreadsheets.get({
+    auth,
+    spreadsheetId: id
+  })
+  return data
+}
+
+export const getGoogleSpreadSheetRows = async (id) => {
+  const data = await googleSheets.spreadsheets.values.get({
+    auth,
+    spreadsheetId: id,
+    range: "Mall"
+  })
+  return data
+}
+
+export const updateGoogleSpreadSheet = async (id, data) => {
+  console.log(data);
+  
+  googleSheets.spreadsheets.values.append({
+    auth,
+    spreadsheetId:id,
+    range: 'test!A:N',
+    valueInputOption: "RAW",
+    resource: {
+      values: [
+        Object.values(data)
+      ]
+    }
+
+  })
 }
