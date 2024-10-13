@@ -1,0 +1,1 @@
+# Apartment ranking app
