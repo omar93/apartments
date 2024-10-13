@@ -2,6 +2,7 @@ import express from 'express'
 import axios from 'axios'
 import jsdom from 'jsdom'
 import cors from 'cors'
+
 import { formatApartmentData } from './util.js'
 
 const { JSDOM } = jsdom
@@ -19,12 +20,13 @@ app.post('/', async (req, res) => {
   try {
     let page = await axios.get(link)  
     const dom = new JSDOM(page.data)
-    formatApartmentData(dom)
+    let data = formatApartmentData(dom)
+
+    // Use 'data' to update sheet
   } catch (err) {
     console.log(err);
     
   }
-
 
   res.status(200).json("Added apartment")
 })
