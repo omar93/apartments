@@ -1,3 +1,4 @@
+import {arrayMoveImmutable} from 'array-move'
 import { google } from 'googleapis'
 
 const auth = new google.auth.GoogleAuth({
@@ -12,7 +13,7 @@ const googleSheets = google.sheets({
   auth: client
 })
 
-export const formatApartmentData = (dom) => {
+export const formatApartmentData = (dom, link) => {
   
   let dataObject = {}
   
@@ -22,21 +23,84 @@ export const formatApartmentData = (dom) => {
 
   dataObject.price = price
 
-  const exludedKeys = ['Premium', ' ','']
+  const exludedKeys = [
+    'Premium', 
+    ' ',
+    '', 
+    'Antal besök', 
+    'Pris/m²',
+  ]
 
   let keys = Array.from(attributesKeys)
   let values = Array.from(attributesValues)
 
   keys.forEach((key,i) => {
+    let value = values[i].textContent
 
     if(!exludedKeys.includes(key.textContent)) {
-      dataObject[key.textContent.toString()] = values[i].textContent
+      if(key.textContent === 'Våning') {
+        value = value.split(',')
+        dataObject.hiss = value[1].trim()
+        dataObject.Våning = value[0].trim()
+        return
+      }
+      if(key.textContent === 'Driftkostnad') {
+        value = value.split('kr')
+        dataObject.Driftkostnad = parseInt(value[0])
+        return
+      }
+      dataObject[key.textContent.toString()] = value
     }
 
   })
 
-  return dataObject
 
+  const googleSheetsData = calculatePrices(dataObject, link)
+  return googleSheetsData
+
+}
+
+const calculatePrices = (data, link) => {
+  let kontant = 2000000
+  let price = parseInt(data.price.split('kr')[0].replaceAll("\u00A0", ""))  
+  let avgift = parseInt(data.Avgift.split('kr')[0].replaceAll("\u00A0", ""))
+
+  data.Avgift = avgift
+  data['Ränta'] = Math.round((price-kontant)*(2.25/12)/100)
+  data.rank = 0
+  
+  data.monthlyCost = data.Avgift + data.Ränta + data.Driftkostnad
+
+  data.link = link
+
+  const desiredOrder = [
+    'rank',
+    'link',
+    'price',
+    'Avgift',
+    'Ränta',
+    'Driftkostnad',
+    'monthlyCost',
+    'Boarea',
+    'Antal rum',
+    'Bostadstyp',
+    'Upplåtelseform',
+    'Balkong',
+    'hiss',
+    'Våning',
+    'Byggår',
+    'Förening',
+    'Energiklass'
+  ];
+
+  let swag = getOrderedValues(data, desiredOrder)
+  
+  return swag
+
+}
+
+function getOrderedValues(obj, keyOrder) {
+  return keyOrder.map(key => obj[key]);
 }
 
 export const getGoogleSpreadSheet = async (id) => {
@@ -65,10 +129,9 @@ export const updateGoogleSpreadSheet = async (id, data) => {
     range: 'test!A:N',
     valueInputOption: "RAW",
     resource: {
-      values: [
-        Object.values(data)
-      ]
+      values: [data]
     }
 
   })
 }
+

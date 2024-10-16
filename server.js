@@ -18,7 +18,7 @@ const spreadsheetId = '1B358lUbcOCVg_rF2Xr1ZTI205BZUWdhdErZK9VYtRtU'
 const app = express()
 const port = 3000
 
-// app.use(express.static('public'))
+app.use(express.static('public'))
 app.use(cors())
 app.use(express.json());
 
@@ -41,13 +41,12 @@ app.post('/', async (req, res) => {
   try {
     let page = await axios.get(link)  
     const dom = new JSDOM(page.data)
-    let data = formatApartmentData(dom)
+    let data = formatApartmentData(dom, link)
     updateGoogleSpreadSheet(spreadsheetId, data)
   } catch (err) {
     console.log(err);
     
   }
-
   res.status(200).json("Added apartment")
 })
 
