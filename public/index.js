@@ -9,9 +9,4 @@ submitButton.addEventListener('click', async () => {
           "Content-type": "application/json; charset=UTF-8"
         }
     })
-    
-    let response = await request
-    let responseText = await response.json()
-    console.log(responseText);
-    
 })
