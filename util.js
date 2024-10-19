@@ -18,6 +18,7 @@ export const formatApartmentData = (dom, link) => {
   let dataObject = {}
   
   const price = dom.window.document.querySelector('.ListingPrice_listingPrice__jg_CG').textContent
+  let linkText = dom.window.document.querySelector('h1')  
   const attributesKeys = dom.window.document.querySelectorAll('.AttributeRow_attributeNames__nflW3')
   const attributesValues = dom.window.document.querySelectorAll('.AttributeRow_attributeValue__LUAyu')
 
@@ -27,8 +28,7 @@ export const formatApartmentData = (dom, link) => {
     'Premium', 
     ' ',
     '', 
-    'Antal besök', 
-    'Pris/m²',
+    'Antal besök',
   ]
 
   let keys = Array.from(attributesKeys)
@@ -44,34 +44,37 @@ export const formatApartmentData = (dom, link) => {
         dataObject.Våning = value[0].trim()
         return
       }
-      if(key.textContent === 'Driftkostnad') {
-        value = value.split('kr')
-        dataObject.Driftkostnad = parseInt(value[0])
-        return
-      }
       dataObject[key.textContent.toString()] = value
     }
 
   })
 
-
-  const googleSheetsData = calculatePrices(dataObject, link)
+  const googleSheetsData = calculatePrices(dataObject, link, linkText.textContent)
   return googleSheetsData
 
 }
 
-const calculatePrices = (data, link) => {
+const calculatePrices = (data, link, linkText) => {
+  console.log(data);
+  
   let kontant = 2000000
-  let price = parseInt(data.price.split('kr')[0].replaceAll("\u00A0", ""))  
+
+
+  let price = parseInt(data.price.split('kr')[0].replaceAll("\u00A0", ""))
   let avgift = parseInt(data.Avgift.split('kr')[0].replaceAll("\u00A0", ""))
 
-  data.Avgift = avgift
-  data['Ränta'] = Math.round((price-kontant)*(2.25/12)/100)
-  data.rank = 0
-  
-  data.monthlyCost = data.Avgift + data.Ränta + data.Driftkostnad
+  if(data.Driftkostnad) {
+    let driftKostnad = parseInt(data.Driftkostnad.split('kr')[0].replaceAll("\u00A0", ""))
+    data.Driftkostnad = driftKostnad/12
+  }
 
-  data.link = link
+  data.Avgift = avgift
+  data['Ränta'] = null
+  data.rank = 0
+  data.Driftkostnad = 0
+  data.monthlyCost = null
+  data.link =  `=HYPERLINK("${link}", "${linkText}")`
+  data.price = price
 
   const desiredOrder = [
     'rank',
@@ -85,17 +88,17 @@ const calculatePrices = (data, link) => {
     'Antal rum',
     'Bostadstyp',
     'Upplåtelseform',
-    'Balkong',
     'hiss',
-    'Våning',
     'Byggår',
+    'Balkong',
+    'Våning',
     'Förening',
     'Energiklass'
   ];
 
-  let swag = getOrderedValues(data, desiredOrder)
+  let dataInOrder = getOrderedValues(data, desiredOrder)
   
-  return swag
+  return dataInOrder
 
 }
 
@@ -126,12 +129,17 @@ export const updateGoogleSpreadSheet = async (id, data) => {
   googleSheets.spreadsheets.values.append({
     auth,
     spreadsheetId:id,
-    range: 'test!A:N',
-    valueInputOption: "RAW",
+    range: 'nodejs!A:N',
+    valueInputOption: "USER_ENTERED",
     resource: {
       values: [data]
     }
-
   })
+
+  // googleSheets.spreadsheets.batchUpdate({
+  //   auth,
+  //   spreadsheetId:id,
+    
+  // })
 }
 
