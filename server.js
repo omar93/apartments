@@ -7,7 +7,7 @@ import {
   updateGoogleSpreadSheet,
   extractDomData,
   cleanupData,
-  formatData
+  sortData
  } from './util.js'
 
 const { JSDOM } = jsdom
@@ -28,8 +28,8 @@ app.post('/', async (req, res) => {
     const dom = new JSDOM(page.data)
     const scrapedData = extractDomData(dom)    
     const cleanData = cleanupData(scrapedData)
-    const formattedData = formatData(cleanData)
-    updateGoogleSpreadSheet(process.env.SPREADSHEETID, formattedData)
+    const sortedData = sortData(cleanData)    
+    updateGoogleSpreadSheet(process.env.SPREADSHEETID, sortedData)
   } catch (err) {
     console.log(err);
   }
