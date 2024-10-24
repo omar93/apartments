@@ -54,11 +54,14 @@ export const cleanupData = (data) => {
   data.price = cleanPrice
   data['Ränta'] = null
   data.rank = 0
+  data.Boarea = data.Boarea.match(/[\d,]+/)[0].replace(",", ".")
+  data['Antal rum'] = data['Antal rum'].split(' ')[0]
 
 
   data.monthlyCost = null
   data.link = `=HYPERLINK("${data.url}", "${data.address}")`
 
+  // Om avgift finns
   if(data.Avgift) {
     const cleanAvgift = parseInt(data.Avgift.split('kr')[0].replaceAll("\u00A0", ""))
     data.Avgift = cleanAvgift
@@ -66,12 +69,44 @@ export const cleanupData = (data) => {
     data.Avgift = 0
   }
  
+  // Om driftkostnad finns
   if(data.Driftkostnad) {
-    const cleanDriftKostnad = parseInt(data.Driftkostnad.split('kr')[0].replaceAll("\u00A0", ""))/12
-    data.Driftkostnad = cleanDriftKostnad
+    const cleanDriftKostnad = parseInt(data.Driftkostnad.split('kr')[0].replaceAll("\u00A0", ""))
+    data.Driftkostnad = (cleanDriftKostnad/12)
   } else {
     data.Driftkostnad = 0
   }
+
+  // Om balkong finns
+  if(data.Balkong) {
+    data.Balkong = 'Ja'
+  } else {
+    data.Balkong = 'Nej'
+  }
+
+  // Om våning/hiss finns
+  if(data['Våning']) {
+    const vaning = data['Våning'].split(',')[0]
+    const hiss = data['Våning'].split(',')[1].trim()
+
+    // Om hiss saknas
+    if(hiss === 'hiss finns ej') {
+      data.hiss = 'Nej'
+    }
+
+    // Om hiss finns
+    if(hiss === 'hiss finns') {
+      data.hiss = 'Ja'
+    }
+    
+    data['Våning'] = vaning
+
+  } else {
+    data['Våning'] = 'Bottenplan'
+    data.hiss = 'Nej'
+  }
+
+  data.roomsqm = null
 
   const unwantedProperties = ['url', 'address']
   data = removeUnusedProperties(unwantedProperties, data) 
@@ -91,14 +126,15 @@ export const sortData = (data) => {
     'monthlyCost',
     'Boarea',
     'Antal rum',
+    'Våning',
+    'hiss',
+    'Balkong',
+    'roomsqm',
     'Bostadstyp',
     'Upplåtelseform',
-    'hiss',
     'Byggår',
-    'Balkong',
-    'Våning',
+    'Energiklass',
     'Förening',
-    'Energiklass'
   ]
 
   

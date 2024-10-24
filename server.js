@@ -26,7 +26,7 @@ app.post('/', async (req, res) => {
   try {
     const page = await axios.get(link)
     const dom = new JSDOM(page.data)
-    const scrapedData = extractDomData(dom)    
+    const scrapedData = extractDomData(dom)
     const cleanData = cleanupData(scrapedData)
     const sortedData = sortData(cleanData)    
     updateGoogleSpreadSheet(process.env.SPREADSHEETID, sortedData)
