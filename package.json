@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node --env-file=.env server.js",
-    "dev": "node --watch --env-file=.env server.js"
+    "devdb": "node --watch --env-file=.env server.js",
+    "dev": "concurrently  \"docker-compose up\" \"node --watch --env-file=.env server.js\""
   },
   "keywords": [],
   "author": "Omar Alhamad <omar93@hotmail.se>",
