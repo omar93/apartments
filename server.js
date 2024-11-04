@@ -23,7 +23,7 @@ app.post('/', async (req, res) => {
 
   const link = req.body.link
 
-  try {
+  try {    
     const page = await axios.get(link)
     const dom = new JSDOM(page.data)
     const scrapedData = extractDomData(dom)
