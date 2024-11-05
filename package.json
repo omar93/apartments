@@ -23,5 +23,8 @@
   },
   "devDependencies": {
     "node-pg-migrate": "^7.7.1"
-  }
+  },
+  "workspaces": [
+    "frontend"
+  ]
 }

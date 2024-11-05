@@ -25,3 +25,14 @@ export const up = (pgm) => {
     });
     pgm.createIndex('posts', 'userId');
   };
+
+  export const down = (pgm) => {
+    // Drop the index on the 'posts' table first
+    pgm.dropIndex('posts', 'userId');
+    
+    // Drop the 'posts' table (with cascading on foreign keys)
+    pgm.dropTable('posts', { ifExists: true, cascade: true });
+  
+    // Drop the 'users' table
+    pgm.dropTable('users', { ifExists: true, cascade: true });
+  };
