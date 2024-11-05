@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "apartments",
   "version": "0.1.0",
   "description": "",
@@ -8,7 +7,8 @@
     "start": "node --env-file=.env server.js",
     "devdb": "node --watch --env-file=.env server.js",
     "dev": "concurrently  \"docker-compose up\" \"node --watch --env-file=.env server.js\"",
-    "migrate": "node-pg-migrate"
+    "migrate": "cross-env DATABASE_URL=postgres://omar:omar3233@localhost:5432/apartments_db node-pg-migrate -c migrate.config.js",
+    "docker": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./StartDocker.ps1"
   },
   "keywords": [],
   "author": "Omar Alhamad <omar93@hotmail.se>",
@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^1.7.7",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "express": "^4.21.1",
     "googleapis": "^144.0.0",
     "jsdom": "^25.0.1",
