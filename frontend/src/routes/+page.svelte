@@ -1,7 +1,17 @@
 <script>
+    import { onMount } from "svelte";
+
     let apartmentLink = ''
     let sheetLink = ''
     let sheetPostLink = ''
+
+    onMount(() => {
+        let sheet = localStorage.getItem('sheet')
+        if(sheet) {
+            sheetPostLink = sheet
+            updateIframe(sheetPostLink)
+        }
+    })
 
     const handleNewApartment = async() => {
         fetch(`http://localhost:3000/apartment/${sheetPostLink}`, {
@@ -15,9 +25,14 @@
     }
 
     const handleNewSheet = () => {
-        document.querySelector('#iframe').src = sheetLink
+        localStorage.setItem('sheet', sheetLink)
+        updateIframe(sheetLink)
         sheetPostLink = sheetLink.split('.com/')[1].split('/edit')[0].split('d/')[1]        
         sheetLink = ''
+    }
+
+    const updateIframe = (link) => {
+        document.querySelector('#iframe').src = link
     }
     
 </script>
@@ -46,13 +61,15 @@
             </div>
         </div>
         
-        <div class="input-wrapper box-style">
-            <label for="link">Hemnet länk:</label>
-            <div class="inputs">
-                <input type="text" name="link" id="link" bind:value={apartmentLink}>
-                <input type="submit" value="Add" onclick={handleNewApartment}>
+        {#if sheetPostLink != ''}
+            <div class="input-wrapper box-style">
+                <label for="link">Hemnet länk:</label>
+                <div class="inputs">
+                    <input type="text" name="link" id="link" bind:value={apartmentLink}>
+                    <input type="submit" value="Add" onclick={handleNewApartment}>
+                </div>
             </div>
-        </div>
+        {/if}
 
         <div id="instructions-wrapper" class="box-style">
             <p id="instructions">Instructions: <br>
@@ -79,8 +96,9 @@
         height: 100%;
     }
     #bottom-section-wrapper {
+        font-family: sans-serif;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
         gap: 1rem;
         padding: 1rem;
     }
