@@ -1,39 +1,73 @@
 <script>
-    let link = ''
-    const handleClick = async() => {
-        fetch("http://localhost:3000", {
+    let apartmentLink = ''
+    let sheetLink = ''
+    let sheetPostLink = ''
+
+    const handleNewApartment = async() => {
+        fetch(`http://localhost:3000/apartment/${sheetLink}`, {
             method: "POST",
-            body: JSON.stringify({link}),
+            body: JSON.stringify({apartmentLink}),
             headers: {
-            "Content-type": "application/json; charset=UTF-8"
+                "Content-type": "application/json; charset=UTF-8"
             }
         })
+        apartmentLink = ''
     }
+
+    const handleNewSheet = () => {
+        document.querySelector('#iframe').src = sheetLink
+        sheetPostLink = sheetLink
+        sheetLink = ''
+        
+    }
+    
 </script>
 
 <div id="wrapper">
-    <div id="input-wrapper">
-        <label for="link">Hemnet länk:</label>
-        <input type="text" name="link" id="link" bind:value={link}>
-        <input type="submit" value="Add" onclick={handleClick}>
+
+    <div id="iframe-container">
+        <iframe title="spreadsheet" id="iframe" src="" frameborder="0"></iframe>
     </div>
-    <div id="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th>pris</th>
-                    <th>Avgift</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1500000</td>
-                    <td>5000</td>
-                </tr>
-            </tbody>
-        </table>
+
+    <div id="bottom-section-wrapper">
+
+        <div class="input-wrapper box-style">
+            <div id="sheet-label">
+                <label for="spreadSheetInput">new spreadsheet link:</label>
+                <!-- svelte-ignore a11y_label_has_associated_control -->
+                <label>Current spreadsheet: 
+                    {#if sheetPostLink != ''}
+                        <a href="{sheetPostLink}">Spreadsheet Link</a>
+                    {/if}
+                </label>
+            </div>
+            <div class="inputs">
+                <input type="text" name="spreadSheetInput" id="spreadSheetInput" bind:value={sheetLink}>
+                <input type="submit" value="Use" onclick={handleNewSheet}>
+            </div>
+        </div>
+        
+        <div class="input-wrapper box-style">
+            <label for="link">Hemnet länk:</label>
+            <div class="inputs">
+                <input type="text" name="link" id="link" bind:value={apartmentLink}>
+                <input type="submit" value="Add" onclick={handleNewApartment}>
+            </div>
+        </div>
+
+        <div id="instructions-wrapper" class="box-style">
+            <p id="instructions">Instructions: <br>
+                <br>
+                Create a new spreadsheet or use an existing one, click on "share" then add: <br> <br> <b>apartments@apartments-438418.iam.gserviceaccount.com</b> <br><br> as an editor
+            </p>
+        </div>
+    
     </div>
+
 </div>
+
+
+
 
 <style>
     :root {
@@ -41,79 +75,68 @@
     }
 
     #wrapper {
-        padding: 0;
-        margin-right: 0;
-        display: grid;
-        place-items: center;
+        height: 98dvh;
+        display: flex;
+        flex-direction: column;
+        width: 98dvw;
     }
 
-    #input-wrapper {
+    #iframe-container {
+        width: 100%;
+        height: 100%;
+    }
+
+    #bottom-section-wrapper {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    #sheet-label {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .input-wrapper {
         display: flex;
         flex-direction: column;
     }
 
-    #table-wrapper {
-        margin-top: 100px;
+    .inputs {
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
-    
-    /* Basic table styling */
-    table {
+
+    input[type=text] {
+        height: 25px;
+    }
+
+    input[type=submit] {
+        height: 30px;
+        font-size: 1rem;
+    }
+
+    #instructions-wrapper {
+        font-size: 1rem;
+        font-family: sans-serif;
+    }
+
+    .box-style {
+        border: 2px solid rgba(0, 0, 0, 0.342);
+        background-color: bisque;
+        border-radius: .5rem;
+        margin-top: 10px;
+        padding: 1rem;
+        gap: 15px;
+    }
+
+    iframe {
         width: 100%;
-        border-collapse: collapse;
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        margin: 20px 0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
+        height: 100%;
+        border-bottom: 10px solid black;
     }
-
-    /* Header row styling */
-    table th {
-        background-color: #4CAF50;
-        color: white;
-        font-weight: bold;
-        padding: 12px 15px;
-        text-align: left;
-    }
-
-    /* Body cell styling */
-    table td {
-        padding: 10px 15px;
-        border-bottom: 1px solid #dddddd;
-    }
-
-    /* Alternating row color */
-    table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    /* Hover effect for rows */
-    table tr:hover {
-        background-color: #d1e7dd;
-    }
-
-    @media screen and (max-width: 768px) {
-    table, tbody, th, td, tr {
-        display: block;
-        width: 100%;
-    }
-
-    table tr {
-        margin-bottom: 10px;
-    }
-
-    table td, table th {
-        padding: 12px 10px;
-        text-align: right;
-    }
-
-    /* Adding a "before" pseudo-element to label columns on small screens */
-    table td::before {
-        content: attr(data-label);
-        float: left;
-        font-weight: bold;
-        color: #333;
-    }
-}
 
 </style>

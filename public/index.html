@@ -8,13 +8,28 @@
     <title>Apartment rank</title>
 </head>
 <body>
-    <div id="wrapper">
+    <iframe src="" title="data" frameborder="0"></iframe>
+
+    <div id="apartmentWrapper">
         <label for="inputField">Apartment link:</label>
         <div class="horizontal">
             <input type="text" id="inputField" name="inputField">
-            <button type="submit" id="addButton">Add</button>
+            <button type="submit" id="addApartment">Add</button>
         </div>
     </div>
+
+    <div id="spreadSheetWrapper">
+        <label for="inputField">Spreadsheet id:</label>
+        <div class="horizontal">
+            <input type="text" id="inputField" name="inputField">
+            <button type="submit" id="addSpreadsheetId">Use</button>
+        </div>
+    </div>
+
+    <div id="newSpreadSheetSection" class="hidden">
+        <button id="newSpreadSheetButton">new google sheets id</button>
+    </div>
+
     <script src="./index.js"></script>
 </body>
 </html>

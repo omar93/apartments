@@ -4,10 +4,22 @@ body {
     height: 100vh;
 }
 
-#wrapper {
+#apartmentWrapper {
     display: flex;
     flex-direction: column;
-    width: 500px;
+    width: 50%;
+}
+
+#spreadSheetWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+#newSpreadSheetSection {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
 }
 
 .horizontal {
@@ -28,6 +40,16 @@ label {
 }
 
 button {
-    border-radius: 10px;
+    border-radius: 5px;
     flex: 0.5;
+}
+
+iframe {
+    width: 99dvw;
+    height: 90dvh;
+    border: 1px solid black;
+}
+
+.hidden {
+    display: none;
 }

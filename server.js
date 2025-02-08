@@ -19,7 +19,7 @@ app.use(express.static('public'))
 app.use(cors())
 app.use(express.json())
 
-app.post('/', async (req, res) => {
+app.post('/apartment/:id', async (req, res) => {
 
   const link = req.body.link
 
@@ -35,6 +35,7 @@ app.post('/', async (req, res) => {
   }
   res.status(200).json("Added apartment")
 })
+
 
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`)

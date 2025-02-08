@@ -53,6 +53,7 @@ export const cleanupData = (data) => {
 
   data.price = cleanPrice
   data['Ränta'] = null
+  // data.amortering = null
   data.rank = 0
   data.Boarea = data.Boarea.match(/[\d,]+/)[0].replace(",", ".")
   data['Antal rum'] = data['Antal rum'].split(' ')[0]
