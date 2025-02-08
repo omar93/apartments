@@ -4,7 +4,7 @@
     let sheetPostLink = ''
 
     const handleNewApartment = async() => {
-        fetch(`http://localhost:3000/apartment/${sheetLink}`, {
+        fetch(`http://localhost:3000/apartment/${sheetPostLink}`, {
             method: "POST",
             body: JSON.stringify({apartmentLink}),
             headers: {
@@ -16,9 +16,8 @@
 
     const handleNewSheet = () => {
         document.querySelector('#iframe').src = sheetLink
-        sheetPostLink = sheetLink
+        sheetPostLink = sheetLink.split('.com/')[1].split('/edit')[0].split('d/')[1]        
         sheetLink = ''
-        
     }
     
 </script>
@@ -67,63 +66,49 @@
 </div>
 
 
-
-
 <style>
-    :root {
-        font-family: sans-serif;
-    }
-
     #wrapper {
+        font-family: sans-serif;
         height: 98dvh;
         display: flex;
         flex-direction: column;
         width: 98dvw;
     }
-
     #iframe-container {
         width: 100%;
         height: 100%;
     }
-
     #bottom-section-wrapper {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1rem;
         padding: 1rem;
     }
-
     #sheet-label {
         display: flex;
         justify-content: space-between;
     }
-
     .input-wrapper {
         display: flex;
         flex-direction: column;
     }
-
     .inputs {
         margin-top: auto;
         display: flex;
         flex-direction: column;
         gap: 10px;
     }
-
     input[type=text] {
         height: 25px;
     }
-
     input[type=submit] {
         height: 30px;
         font-size: 1rem;
     }
-
     #instructions-wrapper {
         font-size: 1rem;
         font-family: sans-serif;
     }
-
     .box-style {
         border: 2px solid rgba(0, 0, 0, 0.342);
         background-color: bisque;
@@ -132,11 +117,9 @@
         padding: 1rem;
         gap: 15px;
     }
-
     iframe {
         width: 100%;
         height: 100%;
         border-bottom: 10px solid black;
     }
-
 </style>

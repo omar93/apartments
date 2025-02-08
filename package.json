@@ -5,7 +5,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node --env-file=.env server.js",
+    "start": "node --env-file=.env server.js --watch",
     "devdb": "node --watch --env-file=.env server.js",
     "dev": "concurrently  \"docker-compose up\" \"node --watch --env-file=.env server.js\"",
     "migrate": "cross-env DATABASE_URL=postgres://omar:omar3233@localhost:5432/apartments_db node-pg-migrate -c migrate.config.js",
@@ -17,13 +17,10 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.7.7",
-    "cors": "^2.8.5", 
-    "cross-env": "^7.0.3",
+    "cors": "^2.8.5",
     "express": "^4.21.1",
     "googleapis": "^144.0.0",
-    "jsdom": "^25.0.1",
-    "pg": "^8.13.1",
-    "sqlite3": "^5.1.7"
+    "jsdom": "^25.0.1"
   },
   "devDependencies": {
     "node-pg-migrate": "^7.7.1"
