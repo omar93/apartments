@@ -21,11 +21,9 @@ app.use(cors())
 app.use(express.json())
 
 app.post('/apartment/:id', async (req, res) => {
- 
 
   const spreadSheetId = req.params.id
-
-  const link = req.body.link
+  const link = req.body.apartmentLink
 
   try {    
     const page = await axios.get(link)

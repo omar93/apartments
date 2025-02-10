@@ -10,7 +10,8 @@
     "dev": "concurrently  \"docker-compose up\" \"node --watch --env-file=.env server.js\"",
     "migrate": "cross-env DATABASE_URL=postgres://omar:omar3233@localhost:5432/apartments_db node-pg-migrate -c migrate.config.js",
     "docker": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./StartDocker.ps1",
-    "test": "node --watch --env-file=.env server.js"
+    "test": "node --watch --env-file=.env server.js",
+    "nodemon": "nodemon server.js"
   },
   "keywords": [],
   "author": "Omar Alhamad <omar93@hotmail.se>",
@@ -23,7 +24,8 @@
     "jsdom": "^25.0.1"
   },
   "devDependencies": {
-    "node-pg-migrate": "^7.7.1"
+    "node-pg-migrate": "^7.7.1",
+    "nodemon": "^3.1.9"
   },
   "workspaces": [
     "frontend"

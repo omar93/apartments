@@ -143,16 +143,21 @@ export const sortData = (data) => {
 }
 
 export const updateGoogleSpreadSheet = async (id, data) => {
+  googleSheets.spreadsheets.get({
+    spreadsheetId:id
+  }).then(res => console.log(res.data.sheets))
+  
   googleSheets.spreadsheets.values.append({
     auth,
     spreadsheetId:id,
-    range: 'nodejs!A:N',
+    range: 'Sheet1!A:N',
     valueInputOption: "USER_ENTERED",
     resource: {
       values: [data]
     }
   })
 }
+
 
 const removeUnusedProperties = (unwantedKeys, dirtyData) => {
 

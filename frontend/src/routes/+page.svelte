@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount } from "svelte"
 
     let apartmentLink = ''
     let sheetLink = ''
@@ -8,12 +8,13 @@
     onMount(() => {
         let sheet = localStorage.getItem('sheet')
         if(sheet) {
-            sheetPostLink = sheet
-            updateIframe(sheetPostLink)
+            updateIframe(sheet)
+            sheetPostLink = getSheetID(sheet)
         }
     })
 
     const handleNewApartment = async() => {
+        console.log('we making a post request')
         fetch(`http://localhost:3000/apartment/${sheetPostLink}`, {
             method: "POST",
             body: JSON.stringify({apartmentLink}),
@@ -30,6 +31,8 @@
         sheetPostLink = sheetLink.split('.com/')[1].split('/edit')[0].split('d/')[1]        
         sheetLink = ''
     }
+
+    const getSheetID = (sheetLink) => sheetLink.split('.com/')[1].split('/edit')[0].split('d/')[1]       
 
     const updateIframe = (link) => {
         document.querySelector('#iframe').src = link
