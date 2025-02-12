@@ -1,8 +1,15 @@
 version: '3.8'
+
 services:
   app:
     image: omaralhamad/apartments:latest
     ports:
       - "3010:3000"
-    volumes:
-      - ./credentials.json:/app/credentials.json
+    secrets:
+      - google_credentials
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: "/run/secrets/google_sheets_credentials"
+
+secrets:
+  google_sheets_credentials:
+    external: true

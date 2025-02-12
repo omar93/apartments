@@ -1,8 +1,11 @@
 
 import { google } from 'googleapis'
 
+const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || `${process.cwd()}/credentials.json`;
+
+
 const auth = new google.auth.GoogleAuth({
-  keyFile: 'credentials.json',
+  keyFile: credentialsPath,
   scopes: 'https://www.googleapis.com/auth/spreadsheets'
 })
 
