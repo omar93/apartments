@@ -4,23 +4,25 @@ import { google } from 'googleapis'
 
 const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || `${process.cwd()}/credentials.json`
 
+let googleSheets, auth
 
 try {
   const credentialsData = await readFile(credentialsPath, 'utf8');
   const credentials = JSON.parse(credentialsData);
 
 
-  const auth = new google.auth.GoogleAuth({
-    keyFile: credentials,
+  auth = new google.auth.GoogleAuth({
+    credentials,
     scopes: 'https://www.googleapis.com/auth/spreadsheets'
-  })
-
-  const googleSheets = google.sheets({
-    version: 'v4',
-    auth: client
   })
   
   const client = await auth.getClient()
+
+  googleSheets = google.sheets({
+    version: 'v4',
+    auth: client
+  })
+
 } catch (error) {
   console.error('Error setting up Google Sheets:', error);
   process.exit(1);
