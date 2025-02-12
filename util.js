@@ -1,20 +1,33 @@
 
+import { readFile } from 'fs/promises'
 import { google } from 'googleapis'
 
-const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || `${process.cwd()}/credentials.json`;
+const credentialsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || `${process.cwd()}/credentials.json`
 
 
-const auth = new google.auth.GoogleAuth({
-  keyFile: credentialsPath,
-  scopes: 'https://www.googleapis.com/auth/spreadsheets'
-})
+try {
+  const credentialsData = await readFile(credentialsPath, 'utf8');
+  const credentials = JSON.parse(credentialsData);
 
-const client = await auth.getClient()
 
-const googleSheets = google.sheets({
-  version: 'v4',
-  auth: client
-})
+  const auth = new google.auth.GoogleAuth({
+    keyFile: credentials,
+    scopes: 'https://www.googleapis.com/auth/spreadsheets'
+  })
+
+  const googleSheets = google.sheets({
+    version: 'v4',
+    auth: client
+  })
+  
+  const client = await auth.getClient()
+} catch (error) {
+  console.error('Error setting up Google Sheets:', error);
+  process.exit(1);
+}
+
+
+
 
 export const extractDomData = (dom) => {
   

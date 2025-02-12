@@ -1,5 +1,5 @@
 # Step 1: Build the SvelteKit app
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN npm run build
 RUN ls -la  # This will show us where the files are being generated
 
 # Step 2: Create the final container with Express backend
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
