@@ -12,6 +12,7 @@ COPY frontend/ ./
 
 # Build the SvelteKit app
 RUN npm run build
+RUN ls -la  # This will show us where the files are being generated
 
 # Step 2: Create the final container with Express backend
 FROM node:18-alpine
@@ -23,12 +24,10 @@ COPY package*.json ./
 RUN npm install --omit=dev
 
 # Copy the Express backend code
-# But exclude the frontend directory to keep the image clean
 COPY *.js ./
-COPY public ./public
 
-# Copy the built SvelteKit static files into the public folder
-COPY --from=builder /app/build ./public
+# Copy the built files from the builder stage
+COPY --from=builder ../public ./public
 
 EXPOSE 3000
 
