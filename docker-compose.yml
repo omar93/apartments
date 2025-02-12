@@ -6,7 +6,7 @@ services:
     ports:
       - "3010:3000"
     secrets:
-      - google_credentials
+      - google_sheets_credentials
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: "/run/secrets/google_sheets_credentials"
 
